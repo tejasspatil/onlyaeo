@@ -1,0 +1,18 @@
+"$schema" = "./node_modules/wrangler/config-schema.json"
+
+name            = "onlyaeo"
+main            = ".open-next/worker.js"
+compatibility_date  = "2025-03-13"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = ".open-next/assets"
+binding   = "ASSETS"
+
+# ─── Environment variables ───────────────────────────────────────────────────
+# Do NOT put secrets here. Add them in the Cloudflare dashboard:
+#   Workers & Pages → onlyaeo → Settings → Variables and Secrets
+#
+# Required secrets:
+#   LLAMA_API_KEY              (your Llama API key)
+#   NEXT_PUBLIC_FORMSPREE_ID   (your Formspree form ID)
