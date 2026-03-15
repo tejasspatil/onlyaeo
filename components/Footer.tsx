@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 
 const serviceLinks = [
@@ -53,12 +54,7 @@ export default function Footer() {
           {/* Brand column */}
           <div className="flex flex-col gap-5">
             <a href="/" className="flex items-center gap-3 group w-fit">
-              <div
-                className="w-8 h-8 rounded-lg bg-[#22D3EE] flex items-center justify-center"
-                style={{ boxShadow: '0 0 20px rgba(34,211,238,0.35), 0 0 60px rgba(34,211,238,0.12)' }}
-              >
-                <span className="text-[#020617] font-black text-xs tracking-tight select-none">AEO</span>
-              </div>
+              <Image src="/logo.png" alt="OnlyAEO Logo" width={32} height={32} className="object-contain" />
               <span className="font-semibold text-lg tracking-tight">
                 <span className="text-white">Only</span>
                 <span className="text-[#22D3EE] font-bold">AEO</span>
