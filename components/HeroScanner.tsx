@@ -90,7 +90,7 @@ export default function HeroScanner() {
             </div>
 
             {/* Title */}
-            <span className="font-mono text-[11px] font-semibold select-none" style={{ color: '#A5B4FC' }}>
+            <span className="font-mono text-[11px] font-semibold select-none truncate max-w-[140px] xs:max-w-none" style={{ color: '#A5B4FC' }}>
               Try The AI Visibility Scanner
             </span>
 
@@ -119,7 +119,7 @@ export default function HeroScanner() {
                 animate={{ opacity: 1, y: 0 }}
                 className="space-y-3"
               >
-                <div className="flex gap-2">
+                <div className="flex flex-col gap-2 sm:flex-row">
                   <div
                     className="flex-1 flex items-center gap-2.5 rounded-xl px-4 py-2.5 transition-all"
                     style={{
@@ -142,7 +142,7 @@ export default function HeroScanner() {
                   <button
                     onClick={run}
                     disabled={!company.trim()}
-                    className="px-5 py-2.5 font-bold rounded-xl text-[13px] disabled:opacity-25 disabled:cursor-not-allowed transition-all hover:-translate-y-0.5 whitespace-nowrap text-white"
+                    className="w-full sm:w-auto px-5 py-2.5 font-bold rounded-xl text-[13px] disabled:opacity-25 disabled:cursor-not-allowed transition-all hover:-translate-y-0.5 whitespace-nowrap text-white"
                     style={{
                       background: 'linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%)',
                       boxShadow: '0 0 20px rgba(99,102,241,0.35)',
@@ -172,7 +172,7 @@ export default function HeroScanner() {
                     transition={{ duration: 0.2 }}
                     className="flex items-center gap-3"
                   >
-                    <div className="flex items-center gap-2 min-w-[188px]">
+                    <div className="flex items-center gap-2 min-w-[160px] sm:min-w-[188px]">
                       <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: step.color }} />
                       <span className="text-[12px]" style={{ color: '#475569' }}>{step.label}</span>
                     </div>
