@@ -224,25 +224,25 @@ export default function HeroScanner() {
 
                   {/* Warning box */}
                   <div
-                    className="flex items-start gap-3 rounded-xl px-4 py-3.5"
+                    className="relative flex items-center justify-center rounded-xl px-4 py-3.5 overflow-hidden"
                     style={{
                       background: 'rgba(245,158,11,0.08)',
                       border: '1px solid rgba(245,158,11,0.25)',
+                      minHeight: '48px',
                     }}
                   >
-                    <span className="text-amber-400 text-base flex-shrink-0 mt-0.5">⚠</span>
-                    <div className="relative">
-                      <p className="text-amber-400 font-bold text-[13px] select-none pointer-events-none" style={{ filter: 'blur(4px)' }}>
-                        {submitted}: not found in AI recommendations
-                      </p>
-                      <button
-                        onClick={scrollToContact}
-                        className="absolute inset-0 flex items-center text-left text-[12px] sm:text-[13px] font-semibold leading-snug transition-opacity hover:opacity-80"
-                        style={{ color: 'rgba(251,191,36,0.9)' }}
-                      >
-                        to know more get your free AI Audit →
-                      </button>
-                    </div>
+                    {/* Blurred background text — decorative only */}
+                    <p className="select-none pointer-events-none text-amber-400 font-bold text-[13px] text-center w-full" style={{ filter: 'blur(5px)', opacity: 0.6 }}>
+                      ⚠ {submitted}: not found in AI recommendations
+                    </p>
+                    {/* Overlay CTA — centered over the blur */}
+                    <button
+                      onClick={scrollToContact}
+                      className="absolute inset-0 flex items-center justify-center gap-1.5 text-[12px] sm:text-[13px] font-semibold transition-opacity hover:opacity-75 px-4 text-center"
+                      style={{ color: 'rgba(251,191,36,0.95)' }}
+                    >
+                      to know more get your free AI Audit →
+                    </button>
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-2.5">
