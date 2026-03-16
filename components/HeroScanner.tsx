@@ -231,22 +231,17 @@ export default function HeroScanner() {
                     }}
                   >
                     <span className="text-amber-400 text-base flex-shrink-0 mt-0.5">⚠</span>
-                    <div>
-                      <p className="text-amber-400 font-bold text-[13px]">
+                    <div className="relative">
+                      <p className="text-amber-400 font-bold text-[13px] select-none pointer-events-none" style={{ filter: 'blur(4px)' }}>
                         {submitted}: not found in AI recommendations
                       </p>
-                      <div className="relative mt-1">
-                        <p className="text-[11px] leading-snug select-none pointer-events-none" style={{ color: 'rgba(251,191,36,0.5)', filter: 'blur(4px)' }}>
-                          Invisible across 5+ major AI models
-                        </p>
-                        <button
-                          onClick={scrollToContact}
-                          className="absolute inset-0 flex items-center text-left text-[10px] xs:text-[11px] font-semibold leading-snug transition-opacity hover:opacity-80"
-                          style={{ color: 'rgba(251,191,36,0.85)' }}
-                        >
-                          to know more get your free AI Audit →
-                        </button>
-                      </div>
+                      <button
+                        onClick={scrollToContact}
+                        className="absolute inset-0 flex items-center text-left text-[12px] sm:text-[13px] font-semibold leading-snug transition-opacity hover:opacity-80"
+                        style={{ color: 'rgba(251,191,36,0.9)' }}
+                      >
+                        to know more get your free AI Audit →
+                      </button>
                     </div>
                   </div>
 
