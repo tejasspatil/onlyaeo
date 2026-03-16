@@ -241,7 +241,7 @@ export default function HeroScanner() {
                       className="absolute inset-0 flex items-center justify-center gap-1.5 text-[12px] sm:text-[13px] font-semibold transition-opacity hover:opacity-75 px-4 text-center"
                       style={{ color: 'rgba(251,191,36,0.95)' }}
                     >
-                      to know more get your free AI Audit →
+                      To know more get your free AI Audit →
                     </button>
                   </div>
 
