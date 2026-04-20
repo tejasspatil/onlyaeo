@@ -131,12 +131,12 @@ export default function PricingPage() {
                   </h2>
                 </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
                   {/* ── Starter ── */}
                   <motion.div
                     variants={fadeUp}
-                    className="rounded-2xl p-9 flex flex-col"
+                    className="rounded-2xl p-7 flex flex-col"
                     style={{
                       background: '#FFFFFF',
                       border: '1px solid #E8EDFB',
@@ -185,7 +185,7 @@ export default function PricingPage() {
                   {/* ── Growth ── */}
                   <motion.div
                     variants={fadeUp}
-                    className="rounded-2xl p-9 flex flex-col relative"
+                    className="rounded-2xl p-7 flex flex-col relative"
                     style={{
                       background: '#FFFFFF',
                       border: '2px solid #22D3EE',
@@ -245,11 +245,11 @@ export default function PricingPage() {
                       </CheckRow>
                       <CheckRow>
                         Quora, Reddit &amp; Wikipedia strategy{' '}
-                        <span className="inline-block ml-1 font-bold align-middle" style={{ fontSize: 10, background: '#EEF2FF', border: '1px solid rgba(99,102,241,0.3)', color: '#4F46E5', padding: '2px 7px', borderRadius: 4 }}>New</span>
+                        <span className="inline-block ml-1 font-bold align-middle" style={{ fontSize: 10, background: '#EEF2FF', border: '1px solid rgba(99,102,241,0.3)', color: '#4F46E5', padding: '2px 7px', borderRadius: 4 }}>Strategy only</span>
                       </CheckRow>
                       <CheckRow>
-                        Social content: <strong style={{ color: '#0F172A', fontWeight: 600 }}>10 LinkedIn + 10 X posts</strong>{' '}
-                        <span className="inline-block ml-1 font-bold align-middle" style={{ fontSize: 10, background: '#EEF2FF', border: '1px solid rgba(99,102,241,0.3)', color: '#4F46E5', padding: '2px 7px', borderRadius: 4 }}>New</span>
+                        Social content strategy: <strong style={{ color: '#0F172A', fontWeight: 600 }}>10 LinkedIn + 10 X posts</strong>{' '}
+                        <span className="inline-block ml-1 font-bold align-middle" style={{ fontSize: 10, background: '#EEF2FF', border: '1px solid rgba(99,102,241,0.3)', color: '#4F46E5', padding: '2px 7px', borderRadius: 4 }}>Strategy only</span>
                       </CheckRow>
                     </ul>
 
@@ -269,6 +269,77 @@ export default function PricingPage() {
                       Get Started →
                     </a>
                   </motion.div>
+
+                  {/* ── Enterprise ── */}
+                  <motion.div
+                    variants={fadeUp}
+                    className="rounded-2xl p-7 flex flex-col relative"
+                    style={{
+                      background: '#0F172A',
+                      border: '1px solid #1E293B',
+                      boxShadow: '0 8px 40px rgba(15,23,42,0.18)',
+                    }}
+                  >
+                    {/* top gradient line */}
+                    <div
+                      className="absolute top-0 left-8 right-8 h-px"
+                      style={{ background: 'linear-gradient(90deg, transparent, #818CF8, transparent)' }}
+                    />
+
+                    <p className="font-bold uppercase tracking-widest mb-3" style={{ fontSize: 12, color: '#818CF8', letterSpacing: '0.12em' }}>
+                      Enterprise
+                    </p>
+                    <div className="flex items-baseline gap-1.5 mb-2">
+                      <span className="font-black" style={{ fontSize: 36, color: '#F1F5F9', letterSpacing: '-0.03em', lineHeight: 1 }}>On demand</span>
+                    </div>
+                    <p className="mb-8 pb-7" style={{ fontSize: 14, color: '#64748B', borderBottom: '1px solid #1E293B' }}>
+                      Custom scope for multiple brands, product lines, or geographies.
+                    </p>
+
+                    <p className="uppercase tracking-widest mb-5" style={{ fontSize: 11, fontWeight: 700, color: '#334155', letterSpacing: '0.12em' }}>
+                      Everything in Growth, plus
+                    </p>
+                    <ul className="flex flex-col gap-4 mb-9 flex-1">
+                      {[
+                        'Multi-brand & multi-market coverage',
+                        'Custom article volume & content cadence',
+                        'Dedicated account manager',
+                        'Bespoke reporting & executive dashboards',
+                        'Priority onboarding & strategy sessions',
+                      ].map((item, i) => (
+                        <li key={i} className="flex items-start gap-3" style={{ fontSize: 14, color: '#94A3B8' }}>
+                          <span
+                            className="flex-shrink-0 flex items-center justify-center rounded-full mt-0.5"
+                            style={{ width: 20, height: 20, background: 'rgba(129,140,248,0.15)', border: '1px solid rgba(129,140,248,0.25)', flexShrink: 0 }}
+                          >
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#818CF8" strokeWidth="2.5">
+                              <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                          </span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <a
+                      href="https://calendly.com/tejas-gai/30min"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block w-full text-center font-bold rounded-xl transition-all duration-200 hover:-translate-y-0.5"
+                      style={{
+                        padding: '14px 24px',
+                        fontSize: 15,
+                        background: 'transparent',
+                        color: '#F1F5F9',
+                        border: '1px solid #334155',
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.borderColor = '#818CF8'; e.currentTarget.style.color = '#A5B4FC'; e.currentTarget.style.background = 'rgba(129,140,248,0.08)'; }}
+                      onMouseLeave={e => { e.currentTarget.style.borderColor = '#334155'; e.currentTarget.style.color = '#F1F5F9'; e.currentTarget.style.background = 'transparent'; }}
+                    >
+                      Let&apos;s Talk →
+                    </a>
+                  </motion.div>
+
                 </div>
 
                 {/* Fine print */}
@@ -291,7 +362,7 @@ export default function PricingPage() {
             ref={tableRef}
             style={{ background: '#FAFBFF', padding: '80px 24px' }}
           >
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto">
               <motion.div
                 variants={stagger}
                 initial="hidden"
@@ -310,38 +381,44 @@ export default function PricingPage() {
                   className="overflow-x-auto rounded-2xl"
                   style={{ border: '1px solid #E8EDFB', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(99,102,241,0.05)' }}
                 >
-                  <table className="w-full border-collapse" style={{ background: '#FFFFFF', minWidth: 480 }}>
+                  <table className="w-full border-collapse" style={{ background: '#FFFFFF', minWidth: 640 }}>
                     <thead>
                       <tr>
-                        <th className="text-left font-bold uppercase tracking-widest" style={{ padding: '18px 24px', fontSize: 12, color: '#94A3B8', borderBottom: '1px solid #F1F5F9', letterSpacing: '0.1em' }}>Feature</th>
-                        <th className="text-center font-bold uppercase tracking-widest" style={{ padding: '18px 24px', fontSize: 12, color: '#94A3B8', borderBottom: '1px solid #F1F5F9', letterSpacing: '0.1em' }}>Starter</th>
-                        <th className="text-center font-bold uppercase tracking-widest" style={{ padding: '18px 24px', fontSize: 12, color: '#0891B2', borderBottom: '1px solid #F1F5F9', letterSpacing: '0.1em', background: 'rgba(34,211,238,0.04)' }}>Growth</th>
+                        <th className="text-left font-bold uppercase tracking-widest" style={{ padding: '18px 20px', fontSize: 11, color: '#94A3B8', borderBottom: '1px solid #F1F5F9', letterSpacing: '0.1em' }}>Feature</th>
+                        <th className="text-center font-bold uppercase tracking-widest" style={{ padding: '18px 16px', fontSize: 11, color: '#94A3B8', borderBottom: '1px solid #F1F5F9', letterSpacing: '0.1em' }}>Starter</th>
+                        <th className="text-center font-bold uppercase tracking-widest" style={{ padding: '18px 16px', fontSize: 11, color: '#0891B2', borderBottom: '1px solid #F1F5F9', letterSpacing: '0.1em', background: 'rgba(34,211,238,0.04)' }}>Growth</th>
+                        <th className="text-center font-bold uppercase tracking-widest" style={{ padding: '18px 16px', fontSize: 11, color: '#818CF8', borderBottom: '1px solid #F1F5F9', letterSpacing: '0.1em', background: 'rgba(129,140,248,0.05)' }}>Enterprise</th>
                       </tr>
                     </thead>
                     <tbody>
                       {([
-                        ['AI visibility scan', { type: 'val', v: 'Full' }, { type: 'val', v: 'Full' }],
-                        ['Competitor benchmarking', { type: 'check' }, { type: 'check' }],
-                        ['Gap analysis report', { type: 'check' }, { type: 'check' }],
-                        ['AEO strategy & architecture plan', { type: 'check' }, { type: 'check' }],
-                        ['Website & content structure optimisation', { type: 'check' }, { type: 'check' }],
-                        ['AEO-optimised articles per month', { type: 'val', v: '250' }, { type: 'val', v: '500' }],
-                        ['Performance reporting', { type: 'plain', v: 'Monthly' }, { type: 'val', v: 'Bi-monthly' }],
-                        ['PR articles (written & published)', { type: 'dash' }, { type: 'val', v: '2 / month' }],
-                        ['Quora, Reddit & Wikipedia strategy', { type: 'dash' }, { type: 'check' }],
-                        ['Social media content creation', { type: 'dash' }, { type: 'val', v: '10 LinkedIn + 10 X' }],
-                      ] as [string, { type: string; v?: string }, { type: string; v?: string }][]).map(([feature, starter, growth], i) => {
-                        const cell = (c: { type: string; v?: string }, isGrowth = false) => {
+                        ['AI visibility scan',                     { type: 'val', v: 'Full' },      { type: 'val', v: 'Full' },       { type: 'val', v: 'Full' }],
+                        ['Competitor benchmarking',                { type: 'check' },               { type: 'check' },                { type: 'check' }],
+                        ['Gap analysis report',                    { type: 'check' },               { type: 'check' },                { type: 'check' }],
+                        ['AEO strategy & architecture plan',       { type: 'check' },               { type: 'check' },                { type: 'check' }],
+                        ['Website & content structure optimisation', { type: 'check' },             { type: 'check' },                { type: 'check' }],
+                        ['AEO-optimised articles per month',       { type: 'val', v: '250' },       { type: 'val', v: '500' },        { type: 'ent', v: 'Custom' }],
+                        ['Performance reporting',                  { type: 'plain', v: 'Monthly' }, { type: 'val', v: 'Bi-monthly' }, { type: 'ent', v: 'Bespoke' }],
+                        ['PR articles (written & published)',      { type: 'dash' },                { type: 'val', v: '2 / month' },  { type: 'ent', v: 'Custom' }],
+                        ['Quora, Reddit & Wikipedia strategy',     { type: 'dash' },                { type: 'strat', v: 'Strategy' }, { type: 'strat', v: 'Strategy' }],
+                        ['Social media content strategy',          { type: 'dash' },                { type: 'strat', v: 'Strategy' }, { type: 'strat', v: 'Strategy' }],
+                        ['Multi-brand & multi-market coverage',    { type: 'dash' },                { type: 'dash' },                 { type: 'check' }],
+                        ['Dedicated account manager',              { type: 'dash' },                { type: 'dash' },                 { type: 'check' }],
+                      ] as [string, { type: string; v?: string }, { type: string; v?: string }, { type: string; v?: string }][]).map(([feature, starter, growth, enterprise], i, arr) => {
+                        const cell = (c: { type: string; v?: string }, col: 'starter' | 'growth' | 'enterprise') => {
                           if (c.type === 'check') return <span style={{ color: '#059669', fontSize: 17, fontWeight: 700 }}>✓</span>
                           if (c.type === 'dash')  return <span style={{ color: '#CBD5E1', fontSize: 18 }}>—</span>
-                          if (c.type === 'val')   return <span style={{ color: isGrowth ? '#0891B2' : '#1E293B', fontWeight: 600, fontSize: 14 }}>{c.v}</span>
+                          if (c.type === 'strat') return <span style={{ color: '#4F46E5', fontWeight: 600, fontSize: 13 }}>{c.v}</span>
+                          if (c.type === 'ent')   return <span style={{ color: '#818CF8', fontWeight: 600, fontSize: 13 }}>{c.v}</span>
+                          if (c.type === 'val')   return <span style={{ color: col === 'growth' ? '#0891B2' : '#1E293B', fontWeight: 600, fontSize: 14 }}>{c.v}</span>
                           return <span style={{ color: '#64748B', fontSize: 14 }}>{c.v}</span>
                         }
                         return (
-                          <tr key={i} style={{ borderBottom: i < 9 ? '1px solid #F8FAFF' : 'none' }}>
-                            <td className="font-medium" style={{ padding: '15px 24px', fontSize: 14, color: '#334155' }}>{feature}</td>
-                            <td className="text-center" style={{ padding: '15px 24px' }}>{cell(starter)}</td>
-                            <td className="text-center" style={{ padding: '15px 24px', background: 'rgba(34,211,238,0.03)' }}>{cell(growth, true)}</td>
+                          <tr key={i} style={{ borderBottom: i < arr.length - 1 ? '1px solid #F8FAFF' : 'none' }}>
+                            <td className="font-medium" style={{ padding: '14px 20px', fontSize: 13.5, color: '#334155' }}>{feature}</td>
+                            <td className="text-center" style={{ padding: '14px 16px' }}>{cell(starter, 'starter')}</td>
+                            <td className="text-center" style={{ padding: '14px 16px', background: 'rgba(34,211,238,0.03)' }}>{cell(growth, 'growth')}</td>
+                            <td className="text-center" style={{ padding: '14px 16px', background: 'rgba(129,140,248,0.04)' }}>{cell(enterprise, 'enterprise')}</td>
                           </tr>
                         )
                       })}
