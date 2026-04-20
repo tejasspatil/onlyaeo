@@ -8,6 +8,7 @@ const navLinks = [
   { label: 'How It Works', href: '#how-it-works' },
   { label: 'Services', href: '#services' },
   { label: 'Results', href: '#proof' },
+  { label: 'Pricing', href: '/pricing', isPage: true },
   { label: 'FAQ', href: '#faq' },
 ]
 
@@ -72,15 +73,25 @@ export default function Nav() {
 
           {/* Desktop nav links */}
           <div className="hidden md:flex items-center gap-7">
-            {navLinks.map((link) => (
-              <button
-                key={link.label}
-                onClick={() => handleNavClick(link.href)}
-                className="text-[#475569] hover:text-[#0F172A] text-sm font-medium transition-colors duration-200 cursor-pointer"
-              >
-                {link.label}
-              </button>
-            ))}
+            {navLinks.map((link) =>
+              link.isPage ? (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="text-[#475569] hover:text-[#0F172A] text-sm font-medium transition-colors duration-200"
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <button
+                  key={link.label}
+                  onClick={() => handleNavClick(link.href)}
+                  className="text-[#475569] hover:text-[#0F172A] text-sm font-medium transition-colors duration-200 cursor-pointer"
+                >
+                  {link.label}
+                </button>
+              )
+            )}
           </div>
 
           {/* Desktop right actions */}
@@ -145,19 +156,34 @@ export default function Nav() {
 
             {/* Nav links */}
             <div className="flex-1 flex flex-col items-center justify-center gap-6 px-6">
-              {navLinks.map((link, i) => (
-                <motion.button
-                  key={link.label}
-                  initial={{ opacity: 0, y: 24 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -12 }}
-                  transition={{ delay: i * 0.07, duration: 0.3 }}
-                  onClick={() => handleNavClick(link.href)}
-                  className="text-2xl font-semibold text-[#E2E8F0] hover:text-[#22D3EE] transition-colors duration-200 cursor-pointer"
-                >
-                  {link.label}
-                </motion.button>
-              ))}
+              {navLinks.map((link, i) =>
+                link.isPage ? (
+                  <motion.a
+                    key={link.label}
+                    href={link.href}
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -12 }}
+                    transition={{ delay: i * 0.07, duration: 0.3 }}
+                    onClick={() => setMobileOpen(false)}
+                    className="text-2xl font-semibold text-[#E2E8F0] hover:text-[#22D3EE] transition-colors duration-200"
+                  >
+                    {link.label}
+                  </motion.a>
+                ) : (
+                  <motion.button
+                    key={link.label}
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -12 }}
+                    transition={{ delay: i * 0.07, duration: 0.3 }}
+                    onClick={() => handleNavClick(link.href)}
+                    className="text-2xl font-semibold text-[#E2E8F0] hover:text-[#22D3EE] transition-colors duration-200 cursor-pointer"
+                  >
+                    {link.label}
+                  </motion.button>
+                )
+              )}
 
               {/* Divider */}
               <motion.div

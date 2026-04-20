@@ -13,6 +13,7 @@ const serviceLinks = [
 const companyLinks = [
   { label: 'How It Works', href: '#how-it-works' },
   { label: 'Who We Help', href: '#services' },
+  { label: 'Pricing', href: '/pricing', isPage: true },
   { label: 'FAQ', href: '#faq' },
   { label: 'Contact Us', href: '#contact' },
 ]
@@ -112,13 +113,23 @@ export default function Footer() {
             <ul className="flex flex-col gap-3">
               {companyLinks.map((item) => (
                 <li key={item.label}>
-                  <button
-                    onClick={() => handleClick(item.href)}
-                    className="text-sm text-left transition-colors duration-200 hover:text-[#F1F5F9]"
-                    style={{ color: '#64748B' }}
-                  >
-                    {item.label}
-                  </button>
+                  {item.isPage ? (
+                    <a
+                      href={item.href}
+                      className="text-sm transition-colors duration-200 hover:text-[#F1F5F9]"
+                      style={{ color: '#64748B' }}
+                    >
+                      {item.label}
+                    </a>
+                  ) : (
+                    <button
+                      onClick={() => handleClick(item.href)}
+                      className="text-sm text-left transition-colors duration-200 hover:text-[#F1F5F9]"
+                      style={{ color: '#64748B' }}
+                    >
+                      {item.label}
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>
