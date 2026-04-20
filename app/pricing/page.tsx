@@ -106,72 +106,12 @@ export default function PricingPage() {
         <div className="relative" style={{ zIndex: 1 }}>
 
           {/* ══════════════════════════════════════════════
-              HERO
-          ══════════════════════════════════════════════ */}
-          <section className="text-center" style={{ padding: '140px 24px 48px' }}>
-            <div className="max-w-3xl mx-auto">
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="flex justify-center"
-              >
-                <SectionPill color="cyan">Plans &amp; Pricing</SectionPill>
-              </motion.div>
-
-              <motion.h1
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.65, delay: 0.08, ease: [0.23, 1, 0.32, 1] }}
-                className="font-black tracking-tight mb-5"
-                style={{ fontSize: 'clamp(38px, 5.5vw, 62px)', lineHeight: 1.05, letterSpacing: '-0.035em', color: '#0F172A' }}
-              >
-                Be the Brand <GradientText>AI Recommends.</GradientText>
-              </motion.h1>
-
-              <motion.p
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.18 }}
-                style={{ fontSize: 'clamp(16px, 1.8vw, 18px)', color: '#64748B', lineHeight: 1.8, maxWidth: 520, margin: '0 auto 32px' }}
-              >
-                Two plans. One goal — your brand cited across ChatGPT, Claude, Gemini &amp; Perplexity
-                before your competitors figure this channel exists.
-              </motion.p>
-
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.55, delay: 0.28 }}
-                className="flex flex-wrap justify-center gap-3"
-              >
-                <a
-                  href="/#contact"
-                  className="inline-flex items-center gap-2 font-bold px-7 py-3.5 rounded-full transition-all duration-300 hover:scale-[1.02] hover:-translate-y-0.5"
-                  style={{ background: '#22D3EE', color: '#020617', fontSize: 15, boxShadow: '0 0 28px rgba(34,211,238,0.28), 0 4px 12px rgba(34,211,238,0.18)' }}
-                >
-                  Get a Free AI Visibility Audit →
-                </a>
-                <a
-                  href="https://calendly.com/tejas-gai/30min"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 font-medium px-6 py-3.5 rounded-full border border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-700 hover:bg-white transition-all duration-200"
-                  style={{ fontSize: 15 }}
-                >
-                  Talk to us
-                </a>
-              </motion.div>
-            </div>
-          </section>
-
-          {/* ══════════════════════════════════════════════
-              PRICING PLANS  (right after hero)
+              PRICING PLANS  (hero of this page)
           ══════════════════════════════════════════════ */}
           <section
             ref={plansRef}
             id="plans"
-            style={{ background: '#FAFBFF', padding: '8px 24px 80px' }}
+            style={{ background: '#FAFBFF', padding: '120px 24px 80px' }}
           >
             <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(0,0,0,0.06), transparent)' }} />
 
