@@ -275,28 +275,22 @@ export default function PricingPage() {
                     variants={fadeUp}
                     className="rounded-2xl p-7 flex flex-col relative"
                     style={{
-                      background: '#0F172A',
-                      border: '1px solid #1E293B',
-                      boxShadow: '0 8px 40px rgba(15,23,42,0.18)',
+                      background: '#FFFFFF',
+                      border: '1px solid #E8EDFB',
+                      boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 8px 32px rgba(129,140,248,0.08)',
                     }}
                   >
-                    {/* top gradient line */}
-                    <div
-                      className="absolute top-0 left-8 right-8 h-px"
-                      style={{ background: 'linear-gradient(90deg, transparent, #818CF8, transparent)' }}
-                    />
-
                     <p className="font-bold uppercase tracking-widest mb-3" style={{ fontSize: 12, color: '#818CF8', letterSpacing: '0.12em' }}>
                       Enterprise
                     </p>
                     <div className="flex items-baseline gap-1.5 mb-2">
-                      <span className="font-black" style={{ fontSize: 36, color: '#F1F5F9', letterSpacing: '-0.03em', lineHeight: 1 }}>On demand</span>
+                      <span className="font-black" style={{ fontSize: 40, color: '#0F172A', letterSpacing: '-0.03em', lineHeight: 1 }}>On demand</span>
                     </div>
-                    <p className="mb-8 pb-7" style={{ fontSize: 14, color: '#64748B', borderBottom: '1px solid #1E293B' }}>
+                    <p className="mb-8 pb-7" style={{ fontSize: 14, color: '#94A3B8', borderBottom: '1px solid #F1F5F9' }}>
                       Custom scope for multiple brands, product lines, or geographies.
                     </p>
 
-                    <p className="uppercase tracking-widest mb-5" style={{ fontSize: 11, fontWeight: 700, color: '#334155', letterSpacing: '0.12em' }}>
+                    <p className="uppercase tracking-widest mb-5" style={{ fontSize: 11, fontWeight: 700, color: '#CBD5E1', letterSpacing: '0.12em' }}>
                       Everything in Growth, plus
                     </p>
                     <ul className="flex flex-col gap-4 mb-9 flex-1">
@@ -307,10 +301,10 @@ export default function PricingPage() {
                         'Bespoke reporting & executive dashboards',
                         'Priority onboarding & strategy sessions',
                       ].map((item, i) => (
-                        <li key={i} className="flex items-start gap-3" style={{ fontSize: 14, color: '#94A3B8' }}>
+                        <li key={i} className="flex items-start gap-3" style={{ fontSize: 14, color: '#64748B' }}>
                           <span
                             className="flex-shrink-0 flex items-center justify-center rounded-full mt-0.5"
-                            style={{ width: 20, height: 20, background: 'rgba(129,140,248,0.15)', border: '1px solid rgba(129,140,248,0.25)', flexShrink: 0 }}
+                            style={{ width: 20, height: 20, background: 'rgba(129,140,248,0.1)', border: '1px solid rgba(129,140,248,0.25)', flexShrink: 0 }}
                           >
                             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#818CF8" strokeWidth="2.5">
                               <polyline points="20 6 9 17 4 12" />
@@ -330,11 +324,11 @@ export default function PricingPage() {
                         padding: '14px 24px',
                         fontSize: 15,
                         background: 'transparent',
-                        color: '#F1F5F9',
-                        border: '1px solid #334155',
+                        color: '#0F172A',
+                        border: '1.5px solid #CBD5E1',
                       }}
-                      onMouseEnter={e => { e.currentTarget.style.borderColor = '#818CF8'; e.currentTarget.style.color = '#A5B4FC'; e.currentTarget.style.background = 'rgba(129,140,248,0.08)'; }}
-                      onMouseLeave={e => { e.currentTarget.style.borderColor = '#334155'; e.currentTarget.style.color = '#F1F5F9'; e.currentTarget.style.background = 'transparent'; }}
+                      onMouseEnter={e => { e.currentTarget.style.borderColor = '#818CF8'; e.currentTarget.style.color = '#4F46E5'; }}
+                      onMouseLeave={e => { e.currentTarget.style.borderColor = '#CBD5E1'; e.currentTarget.style.color = '#0F172A'; }}
                     >
                       Let&apos;s Talk →
                     </a>
