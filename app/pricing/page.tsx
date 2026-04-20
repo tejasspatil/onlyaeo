@@ -1,98 +1,103 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
-import { motion } from 'framer-motion'
+import { useRef } from 'react'
+import { motion, useInView } from 'framer-motion'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 
-const CheckIcon = () => (
-  <div
-    className="flex-shrink-0 flex items-center justify-center rounded-full mt-0.5"
-    style={{
-      width: 20,
-      height: 20,
-      background: 'rgba(34,211,238,0.1)',
-      border: '1px solid rgba(34,211,238,0.2)',
-    }}
-  >
-    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#22D3EE" strokeWidth="2.5">
-      <polyline points="20 6 9 17 4 12" />
-    </svg>
-  </div>
-)
+/* ─── Shared animation variants ─── */
+const fadeUp = {
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] } },
+}
+const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }
 
-const CheckTag = ({ children }: { children: React.ReactNode }) => (
+/* ─── Small reusable pieces ─── */
+const GradientText = ({ children }: { children: React.ReactNode }) => (
   <span
-    className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full"
     style={{
-      background: 'rgba(255,255,255,0.04)',
-      border: '1px solid rgba(255,255,255,0.08)',
-      color: '#94A3B8',
+      background: 'linear-gradient(135deg, #22D3EE 0%, #818CF8 55%, #C084FC 100%)',
+      WebkitBackgroundClip: 'text',
+      WebkitTextFillColor: 'transparent',
+      backgroundClip: 'text',
     }}
   >
-    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5">
-      <polyline points="20 6 9 17 4 12" />
-    </svg>
     {children}
   </span>
 )
 
+const SectionPill = ({ color, children }: { color: 'cyan' | 'indigo' | 'violet'; children: React.ReactNode }) => {
+  const styles = {
+    cyan:   { bg: '#ECFEFF', border: 'rgba(34,211,238,0.35)',  dot: '#22D3EE', text: '#0891B2' },
+    indigo: { bg: '#EEF2FF', border: 'rgba(99,102,241,0.3)',   dot: '#818CF8', text: '#4F46E5' },
+    violet: { bg: '#F5F3FF', border: 'rgba(167,139,250,0.3)',  dot: '#C084FC', text: '#7C3AED' },
+  }[color]
+  return (
+    <div
+      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold uppercase tracking-[0.12em] mb-6"
+      style={{ background: styles.bg, border: `1px solid ${styles.border}`, color: styles.text }}
+    >
+      <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: styles.dot }} />
+      {children}
+    </div>
+  )
+}
+
+const CheckRow = ({ children }: { children: React.ReactNode }) => (
+  <li className="flex items-start gap-3" style={{ color: '#64748B', fontSize: 14 }}>
+    <span
+      className="flex-shrink-0 flex items-center justify-center rounded-full mt-0.5"
+      style={{ width: 20, height: 20, background: '#ECFEFF', border: '1px solid rgba(34,211,238,0.3)' }}
+    >
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0891B2" strokeWidth="2.5">
+        <polyline points="20 6 9 17 4 12" />
+      </svg>
+    </span>
+    <span>{children}</span>
+  </li>
+)
+
+/* ═══════════════════════════════════════════════════════════
+   PAGE
+═══════════════════════════════════════════════════════════ */
 export default function PricingPage() {
-  const revealRefs = useRef<(HTMLDivElement | null)[]>([])
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('opacity-100', 'translate-y-0')
-            entry.target.classList.remove('opacity-0', 'translate-y-7')
-            observer.unobserve(entry.target)
-          }
-        })
-      },
-      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
-    )
+  /* refs for scroll-triggered sections */
+  const opportunityRef  = useRef<HTMLElement>(null)
+  const fitRef          = useRef<HTMLElement>(null)
+  const plansRef        = useRef<HTMLElement>(null)
+  const tableRef        = useRef<HTMLElement>(null)
+  const auditRef        = useRef<HTMLDivElement>(null)
 
-    revealRefs.current.forEach((el) => el && observer.observe(el))
-    return () => observer.disconnect()
-  }, [])
-
-  const addRef = (i: number) => (el: HTMLDivElement | null) => {
-    revealRefs.current[i] = el
-  }
+  const oppInView    = useInView(opportunityRef,  { once: true, margin: '-60px' })
+  const fitInView    = useInView(fitRef,           { once: true, margin: '-60px' })
+  const plansInView  = useInView(plansRef,         { once: true, margin: '-60px' })
+  const tableInView  = useInView(tableRef,         { once: true, margin: '-60px' })
+  const auditInView  = useInView(auditRef,         { once: true, margin: '-60px' })
 
   return (
     <>
       <Nav />
+      <main style={{ background: '#FAFBFF', color: '#0F172A' }}>
 
-      <main
-        className="relative overflow-hidden"
-        style={{ background: '#020617', minHeight: '100vh' }}
-      >
-        {/* Grid texture */}
+        {/* ── dot-grid texture ── */}
         <div
           className="fixed inset-0 pointer-events-none"
           style={{
-            backgroundImage:
-              'linear-gradient(rgba(34,211,238,0.03) 1px, transparent 1px), linear-gradient(90deg,rgba(34,211,238,0.03) 1px,transparent 1px)',
-            backgroundSize: '60px 60px',
+            backgroundImage: 'radial-gradient(rgba(99,102,241,0.06) 1px, transparent 1px)',
+            backgroundSize: '28px 28px',
             zIndex: 0,
           }}
           aria-hidden="true"
         />
 
-        {/* Ambient glow */}
+        {/* ── ambient glow ── */}
         <div
           className="fixed pointer-events-none"
           style={{
-            top: -200,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: 800,
-            height: 600,
-            background:
-              'radial-gradient(ellipse at center, rgba(34,211,238,0.06) 0%, transparent 70%)',
+            top: -160, left: '50%', transform: 'translateX(-50%)',
+            width: 900, height: 500,
+            background: 'radial-gradient(ellipse, rgba(34,211,238,0.07) 0%, rgba(129,140,248,0.05) 45%, transparent 70%)',
             zIndex: 0,
           }}
           aria-hidden="true"
@@ -100,596 +105,723 @@ export default function PricingPage() {
 
         <div className="relative" style={{ zIndex: 1 }}>
 
-          {/* ── Page Hero ── */}
-          <section className="text-center" style={{ padding: '140px 24px 72px' }}>
+          {/* ══════════════════════════════════════════════
+              HERO
+          ══════════════════════════════════════════════ */}
+          <section className="text-center" style={{ padding: '140px 24px 80px' }}>
             <div className="max-w-3xl mx-auto">
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="inline-flex items-center gap-2 rounded-full text-sm font-medium mb-6"
-                style={{
-                  background: 'rgba(34,211,238,0.08)',
-                  border: '1px solid rgba(34,211,238,0.2)',
-                  color: '#22D3EE',
-                  padding: '6px 16px',
-                  letterSpacing: '0.02em',
-                }}
+                className="flex justify-center"
               >
-                <span
-                  className="w-1.5 h-1.5 rounded-full"
-                  style={{ background: '#22D3EE', animation: 'pulse 2s ease-in-out infinite' }}
-                />
-                Plans &amp; Pricing
+                <SectionPill color="cyan">Plans &amp; Pricing</SectionPill>
               </motion.div>
 
               <motion.h1
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.55, delay: 0.08 }}
+                transition={{ duration: 0.65, delay: 0.08, ease: [0.23, 1, 0.32, 1] }}
                 className="font-black tracking-tight mb-5"
-                style={{
-                  fontSize: 'clamp(36px, 5.5vw, 60px)',
-                  lineHeight: 1.1,
-                  letterSpacing: '-0.03em',
-                  color: '#F1F5F9',
-                }}
+                style={{ fontSize: 'clamp(38px, 5.5vw, 62px)', lineHeight: 1.05, letterSpacing: '-0.035em', color: '#0F172A' }}
               >
-                Be the Brand{' '}
-                <span
-                  style={{
-                    background: 'linear-gradient(135deg, #22D3EE 0%, #38BDF8 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
-                  }}
-                >
-                  AI Recommends.
-                </span>
+                Be the Brand <GradientText>AI Recommends.</GradientText>
               </motion.h1>
 
               <motion.p
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.16 }}
-                className="mx-auto leading-relaxed"
-                style={{
-                  fontSize: 'clamp(16px, 2vw, 19px)',
-                  color: '#64748B',
-                  maxWidth: 520,
-                }}
+                transition={{ duration: 0.6, delay: 0.18 }}
+                style={{ fontSize: 'clamp(16px, 1.8vw, 18px)', color: '#64748B', lineHeight: 1.8, maxWidth: 520, margin: '0 auto 32px' }}
               >
-                Two focused plans to get your brand cited across ChatGPT, Claude, Gemini &amp;
-                Perplexity. Pick your growth stage.
+                Two plans. One goal — your brand cited across ChatGPT, Claude, Gemini &amp; Perplexity
+                before your competitors figure this channel exists.
               </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, delay: 0.28 }}
+                className="flex flex-wrap justify-center gap-3"
+              >
+                <a
+                  href="/#contact"
+                  className="inline-flex items-center gap-2 font-bold px-7 py-3.5 rounded-full transition-all duration-300 hover:scale-[1.02] hover:-translate-y-0.5"
+                  style={{ background: '#22D3EE', color: '#020617', fontSize: 15, boxShadow: '0 0 28px rgba(34,211,238,0.28), 0 4px 12px rgba(34,211,238,0.18)' }}
+                >
+                  Get a Free AI Visibility Audit →
+                </a>
+                <a
+                  href="https://calendly.com/tejas-gai/30min"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 font-medium px-6 py-3.5 rounded-full border border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-700 hover:bg-white transition-all duration-200"
+                  style={{ fontSize: 15 }}
+                >
+                  Talk to us
+                </a>
+              </motion.div>
             </div>
           </section>
 
-          {/* ── Plan Cards ── */}
-          <section style={{ padding: '0 24px 72px' }}>
-            <div className="max-w-5xl mx-auto">
+          {/* ══════════════════════════════════════════════
+              THE LLM OPPORTUNITY
+          ══════════════════════════════════════════════ */}
+          <section
+            ref={opportunityRef}
+            style={{ background: '#F5F7FF', padding: '80px 24px', position: 'relative' }}
+          >
+            <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(0,0,0,0.06), transparent)' }} />
+            <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(0,0,0,0.06), transparent)' }} />
 
-              <div
-                className="grid gap-6 mb-16"
-                style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 420px), 1fr))' }}
+            <div className="max-w-6xl mx-auto">
+              <motion.div
+                variants={stagger}
+                initial="hidden"
+                animate={oppInView ? 'visible' : 'hidden'}
               >
-                {/* ── Starter ── */}
-                <motion.div
-                  initial={{ opacity: 0, y: 32 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.55, delay: 0.22 }}
-                  className="rounded-2xl relative"
-                  style={{
-                    background: 'rgba(15,23,42,0.7)',
-                    border: '1px solid rgba(34,211,238,0.15)',
-                    backdropFilter: 'blur(12px)',
-                    padding: '40px 36px',
-                  }}
-                >
-                  <p
-                    className="font-bold uppercase tracking-widest mb-2.5"
-                    style={{ fontSize: 12, color: '#64748B', letterSpacing: '0.1em' }}
+                <motion.div variants={fadeUp} className="text-center mb-14">
+                  <SectionPill color="indigo">The Opportunity</SectionPill>
+                  <h2
+                    className="font-black tracking-tight mb-4"
+                    style={{ fontSize: 'clamp(28px, 4vw, 42px)', lineHeight: 1.1, letterSpacing: '-0.03em', color: '#0F172A' }}
                   >
-                    Starter
+                    LLM traffic is growing — <GradientText>and most brands aren't tracking it</GradientText>
+                  </h2>
+                  <p style={{ fontSize: 16, color: '#64748B', maxWidth: 580, margin: '0 auto', lineHeight: 1.8 }}>
+                    Across every category, AI assistants are now a primary discovery channel for buyers.
+                    The brands getting cited today are compounding an advantage that will be very hard to close in 12 months.
                   </p>
-
-                  <div className="flex items-baseline gap-1.5 mb-1.5">
-                    <span
-                      className="font-black"
-                      style={{ fontSize: 50, color: '#F1F5F9', letterSpacing: '-0.03em', lineHeight: 1 }}
-                    >
-                      $999
-                    </span>
-                    <span style={{ fontSize: 16, color: '#64748B' }}>/month</span>
-                  </div>
-
-                  <p
-                    className="mb-8 pb-7"
-                    style={{
-                      fontSize: 14,
-                      color: '#64748B',
-                      borderBottom: '1px solid rgba(34,211,238,0.1)',
-                    }}
-                  >
-                    The essentials to get your brand into AI answers.
-                  </p>
-
-                  <p
-                    className="uppercase tracking-widest mb-5"
-                    style={{ fontSize: 11, fontWeight: 700, color: '#64748B', letterSpacing: '0.1em' }}
-                  >
-                    What&apos;s included
-                  </p>
-
-                  <ul className="flex flex-col gap-4 mb-9">
-                    {[
-                      <>Full AI visibility <strong style={{ color: '#F1F5F9' }}>audit &amp; benchmark</strong> report</>,
-                      <>AEO strategy &amp; content architecture plan</>,
-                      <>Website &amp; content structure optimisation</>,
-                      <><strong style={{ color: '#F1F5F9' }}>250 AEO-optimised articles</strong> created &amp; published per month</>,
-                      <>Monthly performance reporting</>,
-                    ].map((item, i) => (
-                      <li key={i} className="flex items-start gap-3" style={{ fontSize: 14, color: '#94A3B8' }}>
-                        <CheckIcon />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <a
-                    href="/#contact"
-                    className="block w-full text-center font-bold rounded-lg transition-all duration-200"
-                    style={{
-                      padding: '14px 24px',
-                      fontSize: 15,
-                      background: 'transparent',
-                      color: '#F1F5F9',
-                      border: '1px solid rgba(34,211,238,0.25)',
-                      letterSpacing: '0.01em',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = '#22D3EE'
-                      e.currentTarget.style.color = '#22D3EE'
-                      e.currentTarget.style.background = 'rgba(34,211,238,0.06)'
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = 'rgba(34,211,238,0.25)'
-                      e.currentTarget.style.color = '#F1F5F9'
-                      e.currentTarget.style.background = 'transparent'
-                    }}
-                  >
-                    Get Started →
-                  </a>
                 </motion.div>
 
-                {/* ── Growth ── */}
-                <motion.div
-                  initial={{ opacity: 0, y: 32 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.55, delay: 0.3 }}
-                  className="rounded-2xl relative"
-                  style={{
-                    background: 'rgba(15,23,42,0.7)',
-                    border: '1px solid #22D3EE',
-                    backdropFilter: 'blur(12px)',
-                    padding: '40px 36px',
-                    boxShadow: '0 0 60px rgba(34,211,238,0.1)',
-                  }}
-                >
-                  {/* Top accent */}
-                  <div
-                    className="absolute top-0 rounded-t-2xl pointer-events-none"
-                    style={{
-                      left: 20,
-                      right: 20,
-                      height: 1,
-                      background: 'linear-gradient(90deg, transparent, #22D3EE, transparent)',
-                    }}
-                  />
-
-                  {/* Most Popular badge */}
-                  <div
-                    className="absolute font-bold uppercase"
-                    style={{
-                      top: -13,
-                      right: 28,
-                      background: '#22D3EE',
-                      color: '#020617',
-                      fontSize: 11,
-                      letterSpacing: '0.08em',
-                      padding: '4px 14px',
-                      borderRadius: 100,
-                    }}
-                  >
-                    Most Popular
-                  </div>
-
-                  <p
-                    className="font-bold uppercase tracking-widest mb-2.5"
-                    style={{ fontSize: 12, color: '#22D3EE', letterSpacing: '0.1em' }}
-                  >
-                    Growth
-                  </p>
-
-                  <div className="flex items-baseline gap-1.5 mb-1.5">
-                    <span
-                      className="font-black"
-                      style={{ fontSize: 50, color: '#F1F5F9', letterSpacing: '-0.03em', lineHeight: 1 }}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {[
+                    {
+                      icon: (
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                          <polyline points="17 6 23 6 23 12" />
+                        </svg>
+                      ),
+                      accent: '#22D3EE',
+                      stat: 'Growing monthly',
+                      title: 'AI-Referred Traffic Is Real',
+                      body: "Sessions originating from ChatGPT, Claude, Perplexity, and Gemini are growing month-over-month across every category. Most of it doesn't appear in Google Analytics — it's dark traffic. But it's there, and it converts.",
+                    },
+                    {
+                      icon: (
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="10" />
+                          <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                      ),
+                      accent: '#818CF8',
+                      stat: 'Window is open now',
+                      title: 'First-Mover Advantage Is Still Real',
+                      body: "AI models build citation preference through repeated exposure to authoritative sources. Brands building that authority today will be significantly harder to displace. The window for first-mover advantage is open — but it won't be open indefinitely.",
+                    },
+                    {
+                      icon: (
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                          <circle cx="9" cy="7" r="4" />
+                          <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                      ),
+                      accent: '#C084FC',
+                      stat: '< 10% brands optimised',
+                      title: 'Your Competitors Are Likely Invisible Too',
+                      body: "Fewer than 10% of brands are actively optimised for AI citation. That's your opportunity. The earlier you build your AI citation architecture, the stronger your moat — and the harder you become to displace when your competitors eventually wake up.",
+                    },
+                  ].map((card, i) => (
+                    <motion.div
+                      key={i}
+                      variants={fadeUp}
+                      className="rounded-2xl p-7"
+                      style={{
+                        background: '#FFFFFF',
+                        border: '1px solid #E8EDFB',
+                        boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(99,102,241,0.05)',
+                      }}
                     >
-                      ~$2,000
-                    </span>
-                    <span style={{ fontSize: 16, color: '#64748B' }}>/month</span>
-                  </div>
-
-                  <p
-                    className="mb-8 pb-7"
-                    style={{
-                      fontSize: 14,
-                      color: '#64748B',
-                      borderBottom: '1px solid rgba(34,211,238,0.15)',
-                    }}
-                  >
-                    Everything in Starter, plus distribution &amp; social reach.
-                  </p>
-
-                  <p
-                    className="uppercase tracking-widest mb-5"
-                    style={{ fontSize: 11, fontWeight: 700, color: '#64748B', letterSpacing: '0.1em' }}
-                  >
-                    What&apos;s included
-                  </p>
-
-                  <ul className="flex flex-col gap-4 mb-9">
-                    {[
-                      { text: <><strong style={{ color: '#F1F5F9' }}>Everything in Starter</strong></>, badge: null },
-                      { text: <><strong style={{ color: '#F1F5F9' }}>500 AEO-optimised articles</strong> per month</>, badge: '2×' },
-                      { text: <>Bi-monthly performance reporting</>, badge: null },
-                      { text: <>2 PR articles written &amp; published</>, badge: 'New' },
-                      { text: <>Quora, Reddit &amp; Wikipedia strategy</>, badge: 'New' },
-                      { text: <>Social content: <strong style={{ color: '#F1F5F9' }}>10 LinkedIn + 10 X posts</strong></>, badge: 'New' },
-                    ].map((item, i) => (
-                      <li key={i} className="flex items-start gap-3" style={{ fontSize: 14, color: '#94A3B8' }}>
-                        <CheckIcon />
-                        <span>
-                          {item.text}
-                          {item.badge && (
-                            <span
-                              className="inline-block font-bold ml-1.5 align-middle"
-                              style={{
-                                fontSize: 10,
-                                background: 'rgba(34,211,238,0.1)',
-                                border: '1px solid rgba(34,211,238,0.2)',
-                                color: '#22D3EE',
-                                padding: '2px 7px',
-                                borderRadius: 4,
-                                letterSpacing: '0.04em',
-                              }}
-                            >
-                              {item.badge}
-                            </span>
-                          )}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <a
-                    href="/#contact"
-                    className="block w-full text-center font-bold rounded-lg transition-all duration-200"
-                    style={{
-                      padding: '14px 24px',
-                      fontSize: 15,
-                      background: '#22D3EE',
-                      color: '#020617',
-                      border: '1px solid #22D3EE',
-                      letterSpacing: '0.01em',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = '#38BDF8'
-                      e.currentTarget.style.borderColor = '#38BDF8'
-                      e.currentTarget.style.boxShadow = '0 8px 32px rgba(34,211,238,0.3)'
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = '#22D3EE'
-                      e.currentTarget.style.borderColor = '#22D3EE'
-                      e.currentTarget.style.boxShadow = 'none'
-                    }}
-                  >
-                    Get Started →
-                  </a>
-                </motion.div>
-              </div>
-
-              {/* ── Comparison Table ── */}
-              <div
-                ref={addRef(0)}
-                className="opacity-0 translate-y-7 transition-all duration-700 mb-16"
-              >
-                <h2
-                  className="text-center font-bold mb-8"
-                  style={{ fontSize: 22, color: '#F1F5F9', letterSpacing: '-0.01em' }}
-                >
-                  Feature-by-feature comparison
-                </h2>
-
-                <div
-                  className="overflow-x-auto rounded-2xl"
-                  style={{ border: '1px solid rgba(34,211,238,0.15)' }}
-                >
-                  <table
-                    className="w-full border-collapse"
-                    style={{ background: 'rgba(15,23,42,0.7)', backdropFilter: 'blur(12px)', minWidth: 520 }}
-                    aria-label="Plan feature comparison"
-                  >
-                    <thead>
-                      <tr>
-                        <th
-                          className="text-left font-bold uppercase tracking-widest"
-                          style={{ padding: '20px 24px', fontSize: 12, color: '#64748B', borderBottom: '1px solid rgba(34,211,238,0.1)', letterSpacing: '0.08em' }}
-                        >
-                          Feature
-                        </th>
-                        <th
-                          className="text-center font-bold uppercase tracking-widest"
-                          style={{ padding: '20px 24px', fontSize: 12, color: '#64748B', borderBottom: '1px solid rgba(34,211,238,0.1)', letterSpacing: '0.08em' }}
-                        >
-                          Starter
-                        </th>
-                        <th
-                          className="text-center font-bold uppercase tracking-widest"
-                          style={{ padding: '20px 24px', fontSize: 12, color: '#22D3EE', borderBottom: '1px solid rgba(34,211,238,0.1)', letterSpacing: '0.08em', background: 'rgba(34,211,238,0.04)' }}
-                        >
-                          Growth
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {[
-                        ['AI visibility scan', 'Full', 'Full', 'val', 'val'],
-                        ['Competitor benchmarking', '✓', '✓', 'check', 'check'],
-                        ['Gap analysis report', '✓', '✓', 'check', 'check'],
-                        ['AEO strategy & architecture plan', '✓', '✓', 'check', 'check'],
-                        ['Website & content structure optimisation', '✓', '✓', 'check', 'check'],
-                        ['AEO-optimised articles per month', '250', '500', 'val', 'val'],
-                        ['Performance reporting', 'Monthly', 'Bi-monthly', 'plain', 'val'],
-                        ['PR articles (written & published)', '—', '2 / month', 'dash', 'val'],
-                        ['Quora, Reddit & Wikipedia strategy', '—', '✓', 'dash', 'check'],
-                        ['Social media content creation', '—', '10 LinkedIn + 10 X', 'dash', 'val'],
-                      ].map(([feature, starter, growth, starterType, growthType], i) => (
-                        <tr key={i}>
-                          <td
-                            className="font-medium"
-                            style={{
-                              padding: '15px 24px',
-                              fontSize: 14,
-                              color: '#F1F5F9',
-                              borderBottom: i < 9 ? '1px solid rgba(34,211,238,0.06)' : 'none',
-                            }}
-                          >
-                            {feature}
-                          </td>
-                          <td
-                            className="text-center"
-                            style={{
-                              padding: '15px 24px',
-                              fontSize: (starterType === 'check' || starterType === 'dash') ? 17 : 14,
-                              borderBottom: i < 9 ? '1px solid rgba(34,211,238,0.06)' : 'none',
-                              color: starterType === 'check' ? '#10B981' : starterType === 'dash' ? '#1E293B' : starterType === 'val' ? '#F1F5F9' : '#94A3B8',
-                              fontWeight: ['val', 'check'].includes(starterType as string) ? 600 : 400,
-                            }}
-                          >
-                            {starter}
-                          </td>
-                          <td
-                            className="text-center"
-                            style={{
-                              padding: '15px 24px',
-                              fontSize: (growthType === 'check' || growthType === 'dash') ? 17 : 14,
-                              borderBottom: i < 9 ? '1px solid rgba(34,211,238,0.06)' : 'none',
-                              background: 'rgba(34,211,238,0.03)',
-                              color: growthType === 'check' ? '#10B981' : growthType === 'dash' ? '#1E293B' : growthType === 'val' ? '#F1F5F9' : '#94A3B8',
-                              fontWeight: ['val', 'check'].includes(growthType as string) ? 600 : 400,
-                            }}
-                          >
-                            {growth}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              {/* ── Free Audit Strip ── */}
-              <div
-                ref={addRef(1)}
-                className="opacity-0 translate-y-7 transition-all duration-700 mb-16"
-                style={{ transitionDelay: '0.1s' }}
-              >
-                <div
-                  className="rounded-xl relative overflow-hidden"
-                  style={{
-                    background: '#0F172A',
-                    border: '1px solid rgba(34,211,238,0.15)',
-                    padding: '28px 32px',
-                  }}
-                >
-                  {/* subtle top line */}
-                  <div
-                    className="absolute top-0 left-0 right-0 pointer-events-none"
-                    style={{
-                      height: 2,
-                      background: 'linear-gradient(90deg, transparent 0%, rgba(34,211,238,0.35) 50%, transparent 100%)',
-                    }}
-                  />
-
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-                    <div className="flex-1 min-w-0">
-                      <p
-                        className="uppercase font-bold tracking-widest mb-1.5"
-                        style={{ fontSize: 11, color: '#64748B', letterSpacing: '0.1em' }}
+                      <div
+                        className="flex items-center justify-center rounded-xl mb-5"
+                        style={{ width: 44, height: 44, background: `rgba(${card.accent === '#22D3EE' ? '34,211,238' : card.accent === '#818CF8' ? '129,140,248' : '192,132,252'},0.1)`, color: card.accent }}
                       >
-                        Not sure where to start?
-                      </p>
-                      <h3
-                        className="font-bold mb-2"
-                        style={{ fontSize: 18, color: '#F1F5F9' }}
-                      >
-                        Free AI Visibility Audit
-                      </h3>
-                      <p style={{ fontSize: 14, color: '#64748B', lineHeight: 1.6, maxWidth: 480 }}>
-                        See exactly where your brand stands across ChatGPT, Claude, Gemini &amp; Perplexity
-                        before committing to any plan. No credit card, no obligation.
-                      </p>
-                      <div className="flex flex-wrap gap-2 mt-4">
-                        <CheckTag>Multi-model scan</CheckTag>
-                        <CheckTag>Competitor benchmarking</CheckTag>
-                        <CheckTag>Gap analysis</CheckTag>
-                        <CheckTag>Full report delivered</CheckTag>
+                        {card.icon}
                       </div>
-                    </div>
-
-                    <div className="flex-shrink-0 flex flex-col items-start sm:items-center gap-1">
-                      <span
-                        className="font-black"
-                        style={{ fontSize: 30, color: '#F1F5F9', letterSpacing: '-0.02em' }}
+                      <div
+                        className="text-xs font-bold uppercase tracking-widest mb-2"
+                        style={{ color: card.accent, letterSpacing: '0.1em' }}
                       >
-                        Free
-                      </span>
-                      <span style={{ fontSize: 12, color: '#64748B', marginBottom: 12 }}>
-                        zero commitment
-                      </span>
-                      <a
-                        href="/#contact"
-                        className="inline-flex items-center gap-2 font-bold rounded-lg transition-all duration-200"
-                        style={{
-                          background: '#22D3EE',
-                          color: '#020617',
-                          padding: '12px 22px',
-                          fontSize: 14,
-                          whiteSpace: 'nowrap',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.background = '#38BDF8'
-                          e.currentTarget.style.boxShadow = '0 8px 24px rgba(34,211,238,0.3)'
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.background = '#22D3EE'
-                          e.currentTarget.style.boxShadow = 'none'
-                        }}
-                      >
-                        Get Free Audit →
-                      </a>
-                    </div>
-                  </div>
+                        {card.stat}
+                      </div>
+                      <h3 className="font-bold mb-2" style={{ fontSize: 16, color: '#0F172A' }}>
+                        {card.title}
+                      </h3>
+                      <p style={{ fontSize: 14, color: '#64748B', lineHeight: 1.75 }}>{card.body}</p>
+                    </motion.div>
+                  ))}
                 </div>
-              </div>
+              </motion.div>
+            </div>
+          </section>
 
-              {/* ── Bottom CTA ── */}
-              <div
-                ref={addRef(2)}
-                className="opacity-0 translate-y-7 transition-all duration-700"
-                style={{ transitionDelay: '0.15s' }}
+          {/* ══════════════════════════════════════════════
+              IS AEO RIGHT FOR YOU?
+          ══════════════════════════════════════════════ */}
+          <section
+            ref={fitRef}
+            style={{ background: '#FAFBFF', padding: '80px 24px' }}
+          >
+            <div className="max-w-5xl mx-auto">
+              <motion.div
+                variants={stagger}
+                initial="hidden"
+                animate={fitInView ? 'visible' : 'hidden'}
               >
-                <div
-                  className="rounded-2xl relative overflow-hidden"
+                <motion.div variants={fadeUp} className="text-center mb-12">
+                  <SectionPill color="violet">Honest Expectations</SectionPill>
+                  <h2
+                    className="font-black tracking-tight mb-4"
+                    style={{ fontSize: 'clamp(28px, 4vw, 42px)', lineHeight: 1.1, letterSpacing: '-0.03em', color: '#0F172A' }}
+                  >
+                    AEO is a <GradientText>long game.</GradientText> Here's who it's for.
+                  </h2>
+                  <p style={{ fontSize: 16, color: '#64748B', maxWidth: 520, margin: '0 auto', lineHeight: 1.8 }}>
+                    We'd rather tell you upfront than have you sign up for the wrong reasons.
+                    AEO delivers compounding returns — but not overnight.
+                  </p>
+                </motion.div>
+
+                {/* Timeline callout */}
+                <motion.div
+                  variants={fadeUp}
+                  className="rounded-2xl p-8 mb-8 relative overflow-hidden"
                   style={{
-                    background: 'rgba(15,23,42,0.7)',
-                    border: '1px solid rgba(34,211,238,0.15)',
-                    backdropFilter: 'blur(12px)',
-                    padding: 'clamp(32px, 5vw, 52px) clamp(24px, 5vw, 52px)',
+                    background: '#FFFFFF',
+                    border: '1px solid #E8EDFB',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 8px 32px rgba(99,102,241,0.07)',
                   }}
                 >
-                  {/* top glow line */}
+                  {/* top accent bar */}
                   <div
-                    className="absolute top-0 pointer-events-none"
-                    style={{
-                      left: 48,
-                      right: 48,
-                      height: 1,
-                      background: 'linear-gradient(90deg, transparent, #22D3EE, transparent)',
-                    }}
+                    className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl"
+                    style={{ background: 'linear-gradient(90deg, #22D3EE, #818CF8, #C084FC)' }}
                   />
-
-                  <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-                    <div>
-                      <h2
-                        className="font-extrabold mb-2"
-                        style={{ fontSize: 'clamp(22px, 3vw, 30px)', color: '#F1F5F9', letterSpacing: '-0.02em' }}
-                      >
-                        Ready to get started?
-                      </h2>
-                      <p style={{ fontSize: 16, color: '#64748B' }}>
-                        Pick a plan or start with a free audit — we&apos;ll take it from there.
-                      </p>
-                    </div>
-
-                    <div className="flex flex-wrap gap-3 flex-shrink-0">
-                      <a
-                        href="/#contact"
-                        className="inline-flex items-center font-bold rounded-lg transition-all duration-200"
-                        style={{
-                          background: '#22D3EE',
-                          color: '#020617',
-                          padding: '13px 26px',
-                          fontSize: 15,
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.background = '#38BDF8'
-                          e.currentTarget.style.boxShadow = '0 8px 32px rgba(34,211,238,0.35)'
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.background = '#22D3EE'
-                          e.currentTarget.style.boxShadow = 'none'
-                        }}
-                      >
-                        Get Free Audit →
-                      </a>
-                      <a
-                        href="https://calendly.com/tejas-gai/30min"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center font-semibold rounded-lg transition-all duration-200"
-                        style={{
-                          background: 'transparent',
-                          color: '#F1F5F9',
-                          padding: '12px 26px',
-                          fontSize: 15,
-                          border: '1px solid rgba(34,211,238,0.25)',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.borderColor = '#22D3EE'
-                          e.currentTarget.style.color = '#22D3EE'
-                          e.currentTarget.style.background = 'rgba(34,211,238,0.06)'
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.borderColor = 'rgba(34,211,238,0.25)'
-                          e.currentTarget.style.color = '#F1F5F9'
-                          e.currentTarget.style.background = 'transparent'
-                        }}
-                      >
-                        Talk to Us
-                      </a>
-                    </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-2">
+                    {[
+                      {
+                        phase: 'Month 1',
+                        icon: '📍',
+                        label: 'Baseline & Architecture',
+                        body: 'We audit your current AI visibility, benchmark competitors, and build your citation architecture. You see exactly where you stand — day one.',
+                      },
+                      {
+                        phase: 'Months 2–3',
+                        icon: '📈',
+                        label: 'First Citation Improvements',
+                        body: 'Content and signal layers go live. Most clients see measurable citation frequency improvements within the first few months as AI models start picking up new signals.',
+                      },
+                      {
+                        phase: 'Ongoing',
+                        icon: '🔁',
+                        label: 'Compound & Maintain',
+                        body: "AI models update continuously. Maintaining and growing your citation share requires ongoing work \u2014 like SEO, you don\u2019t stop when you rank. The brands that compound, win.",
+                      },
+                    ].map((step, i) => (
+                      <div key={i} className="flex flex-col gap-3">
+                        <div className="flex items-center gap-3">
+                          <span style={{ fontSize: 22 }}>{step.icon}</span>
+                          <span
+                            className="font-bold text-xs uppercase tracking-widest px-2.5 py-1 rounded-full"
+                            style={{ background: '#F1F5F9', color: '#475569', letterSpacing: '0.1em' }}
+                          >
+                            {step.phase}
+                          </span>
+                        </div>
+                        <h4 className="font-bold" style={{ fontSize: 15, color: '#0F172A' }}>{step.label}</h4>
+                        <p style={{ fontSize: 13.5, color: '#64748B', lineHeight: 1.7 }}>{step.body}</p>
+                      </div>
+                    ))}
                   </div>
+                </motion.div>
+
+                {/* Two-column: Not for you / Is for you */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                  {/* NOT for you */}
+                  <motion.div
+                    variants={fadeUp}
+                    className="rounded-2xl p-7"
+                    style={{
+                      background: '#FFFBFB',
+                      border: '1px solid #FDE8E8',
+                      boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
+                    }}
+                  >
+                    <div className="flex items-center gap-3 mb-5">
+                      <div
+                        className="flex items-center justify-center rounded-full"
+                        style={{ width: 32, height: 32, background: '#FEE2E2' }}
+                      >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2.5">
+                          <line x1="18" y1="6" x2="6" y2="18" />
+                          <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                      </div>
+                      <h3 className="font-bold" style={{ fontSize: 16, color: '#0F172A' }}>AEO is probably not for you if…</h3>
+                    </div>
+                    <ul className="flex flex-col gap-3.5">
+                      {[
+                        'You need qualified leads this week or this month',
+                        'You\'re running a short campaign rather than building a channel',
+                        'You\'re not willing to invest consistently for 3+ months',
+                        'You expect overnight results from any marketing channel',
+                      ].map((item, i) => (
+                        <li key={i} className="flex items-start gap-3" style={{ fontSize: 14, color: '#64748B' }}>
+                          <span className="flex-shrink-0 mt-0.5" style={{ color: '#FCA5A5', fontSize: 16 }}>—</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <div
+                      className="mt-6 p-4 rounded-xl text-sm leading-relaxed"
+                      style={{ background: '#FEF2F2', color: '#991B1B', lineHeight: 1.75 }}
+                    >
+                      <strong>In that case, ads and performance channels are the right call.</strong> We'll say it plainly — they're faster for short-term pipeline. Come back to AEO when you're ready to build a channel that compounds.
+                    </div>
+                  </motion.div>
+
+                  {/* IS for you */}
+                  <motion.div
+                    variants={fadeUp}
+                    className="rounded-2xl p-7"
+                    style={{
+                      background: '#F0FDF4',
+                      border: '1px solid #BBF7D0',
+                      boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
+                    }}
+                  >
+                    <div className="flex items-center gap-3 mb-5">
+                      <div
+                        className="flex items-center justify-center rounded-full"
+                        style={{ width: 32, height: 32, background: '#D1FAE5' }}
+                      >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      </div>
+                      <h3 className="font-bold" style={{ fontSize: 16, color: '#0F172A' }}>AEO is exactly right for you if…</h3>
+                    </div>
+                    <ul className="flex flex-col gap-3.5">
+                      {[
+                        'You want a compounding acquisition channel with lower long-term CAC',
+                        'You\'re tired of bidding against competitors for the same paid inventory',
+                        'You want to own your category\'s AI recommendation before it gets crowded',
+                        'You\'re building a brand that should be the default answer when buyers ask AI',
+                      ].map((item, i) => (
+                        <li key={i} className="flex items-start gap-3" style={{ fontSize: 14, color: '#374151' }}>
+                          <span
+                            className="flex-shrink-0 flex items-center justify-center rounded-full mt-0.5"
+                            style={{ width: 18, height: 18, background: '#D1FAE5', flexShrink: 0 }}
+                          >
+                            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="3">
+                              <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                          </span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <div
+                      className="mt-6 p-4 rounded-xl text-sm leading-relaxed"
+                      style={{ background: '#DCFCE7', color: '#166534', lineHeight: 1.75 }}
+                    >
+                      <strong>AEO is a less competitive channel today — and that's precisely why now is the right time.</strong> The CAC on AI-driven discovery is still low. Get in before your competitors do.
+                    </div>
+                  </motion.div>
+                </div>
+              </motion.div>
+            </div>
+          </section>
+
+          {/* ══════════════════════════════════════════════
+              PRICING PLANS
+          ══════════════════════════════════════════════ */}
+          <section
+            ref={plansRef}
+            id="plans"
+            style={{ background: '#F5F7FF', padding: '80px 24px' }}
+          >
+            <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(0,0,0,0.06), transparent)' }} />
+
+            <div className="max-w-5xl mx-auto">
+              <motion.div
+                variants={stagger}
+                initial="hidden"
+                animate={plansInView ? 'visible' : 'hidden'}
+              >
+                <motion.div variants={fadeUp} className="text-center mb-12">
+                  <SectionPill color="cyan">Choose Your Plan</SectionPill>
+                  <h2
+                    className="font-black tracking-tight"
+                    style={{ fontSize: 'clamp(28px, 4vw, 42px)', lineHeight: 1.1, letterSpacing: '-0.03em', color: '#0F172A' }}
+                  >
+                    Straightforward pricing. <GradientText>No surprises.</GradientText>
+                  </h2>
+                </motion.div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                  {/* ── Starter ── */}
+                  <motion.div
+                    variants={fadeUp}
+                    className="rounded-2xl p-9 flex flex-col"
+                    style={{
+                      background: '#FFFFFF',
+                      border: '1px solid #E8EDFB',
+                      boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 8px 32px rgba(99,102,241,0.06)',
+                    }}
+                  >
+                    <p className="font-bold uppercase tracking-widest mb-3" style={{ fontSize: 12, color: '#94A3B8', letterSpacing: '0.12em' }}>
+                      Starter
+                    </p>
+                    <div className="flex items-baseline gap-1.5 mb-2">
+                      <span className="font-black" style={{ fontSize: 52, color: '#0F172A', letterSpacing: '-0.04em', lineHeight: 1 }}>$999</span>
+                      <span style={{ fontSize: 16, color: '#94A3B8' }}>/month</span>
+                    </div>
+                    <p className="mb-8 pb-7" style={{ fontSize: 14, color: '#94A3B8', borderBottom: '1px solid #F1F5F9' }}>
+                      The essentials to get your brand into AI answers.
+                    </p>
+
+                    <p className="uppercase tracking-widest mb-5" style={{ fontSize: 11, fontWeight: 700, color: '#CBD5E1', letterSpacing: '0.12em' }}>
+                      What&apos;s included
+                    </p>
+                    <ul className="flex flex-col gap-4 mb-9 flex-1">
+                      <CheckRow>Full AI visibility <strong style={{ color: '#0F172A', fontWeight: 600 }}>audit &amp; benchmark</strong> report</CheckRow>
+                      <CheckRow>AEO strategy &amp; content architecture plan</CheckRow>
+                      <CheckRow>Website &amp; content structure optimisation</CheckRow>
+                      <CheckRow><strong style={{ color: '#0F172A', fontWeight: 600 }}>250 AEO-optimised articles</strong> created &amp; published per month</CheckRow>
+                      <CheckRow>Monthly performance reporting</CheckRow>
+                    </ul>
+
+                    <a
+                      href="/#contact"
+                      className="block w-full text-center font-bold rounded-xl transition-all duration-200 hover:-translate-y-0.5"
+                      style={{
+                        padding: '14px 24px',
+                        fontSize: 15,
+                        background: 'transparent',
+                        color: '#0F172A',
+                        border: '1.5px solid #CBD5E1',
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.borderColor = '#22D3EE'; e.currentTarget.style.color = '#0891B2'; }}
+                      onMouseLeave={e => { e.currentTarget.style.borderColor = '#CBD5E1'; e.currentTarget.style.color = '#0F172A'; }}
+                    >
+                      Get Started →
+                    </a>
+                  </motion.div>
+
+                  {/* ── Growth ── */}
+                  <motion.div
+                    variants={fadeUp}
+                    className="rounded-2xl p-9 flex flex-col relative"
+                    style={{
+                      background: '#FFFFFF',
+                      border: '2px solid #22D3EE',
+                      boxShadow: '0 0 0 4px rgba(34,211,238,0.08), 0 8px 40px rgba(34,211,238,0.12)',
+                    }}
+                  >
+                    {/* accent top line */}
+                    <div
+                      className="absolute top-0 left-8 right-8 h-px"
+                      style={{ background: 'linear-gradient(90deg, transparent, #22D3EE, transparent)' }}
+                    />
+
+                    {/* badge */}
+                    <div
+                      className="absolute font-bold uppercase"
+                      style={{
+                        top: -14, right: 28,
+                        background: 'linear-gradient(135deg, #22D3EE, #818CF8)',
+                        color: '#fff',
+                        fontSize: 11, letterSpacing: '0.08em',
+                        padding: '4px 14px', borderRadius: 100,
+                        boxShadow: '0 4px 12px rgba(34,211,238,0.3)',
+                      }}
+                    >
+                      Most Popular
+                    </div>
+
+                    <p className="font-bold uppercase tracking-widest mb-3" style={{ fontSize: 12, color: '#0891B2', letterSpacing: '0.12em' }}>
+                      Growth
+                    </p>
+                    <div className="flex items-baseline gap-1.5 mb-2">
+                      <span className="font-black" style={{ fontSize: 52, color: '#0F172A', letterSpacing: '-0.04em', lineHeight: 1 }}>~$2,000</span>
+                      <span style={{ fontSize: 16, color: '#94A3B8' }}>/month</span>
+                    </div>
+                    <p className="mb-8 pb-7" style={{ fontSize: 14, color: '#94A3B8', borderBottom: '1px solid rgba(34,211,238,0.15)' }}>
+                      Everything in Starter, plus distribution &amp; social reach.
+                    </p>
+
+                    <p className="uppercase tracking-widest mb-5" style={{ fontSize: 11, fontWeight: 700, color: '#94A3B8', letterSpacing: '0.12em' }}>
+                      What&apos;s included
+                    </p>
+                    <ul className="flex flex-col gap-4 mb-9 flex-1">
+                      <CheckRow><strong style={{ color: '#0F172A', fontWeight: 600 }}>Everything in Starter</strong></CheckRow>
+                      <CheckRow>
+                        <strong style={{ color: '#0F172A', fontWeight: 600 }}>500 AEO-optimised articles</strong> per month{' '}
+                        <span
+                          className="inline-block ml-1 font-bold align-middle"
+                          style={{ fontSize: 10, background: '#ECFEFF', border: '1px solid rgba(34,211,238,0.3)', color: '#0891B2', padding: '2px 7px', borderRadius: 4 }}
+                        >
+                          2×
+                        </span>
+                      </CheckRow>
+                      <CheckRow>Bi-monthly performance reporting</CheckRow>
+                      <CheckRow>
+                        2 PR articles written &amp; published{' '}
+                        <span className="inline-block ml-1 font-bold align-middle" style={{ fontSize: 10, background: '#EEF2FF', border: '1px solid rgba(99,102,241,0.3)', color: '#4F46E5', padding: '2px 7px', borderRadius: 4 }}>New</span>
+                      </CheckRow>
+                      <CheckRow>
+                        Quora, Reddit &amp; Wikipedia strategy{' '}
+                        <span className="inline-block ml-1 font-bold align-middle" style={{ fontSize: 10, background: '#EEF2FF', border: '1px solid rgba(99,102,241,0.3)', color: '#4F46E5', padding: '2px 7px', borderRadius: 4 }}>New</span>
+                      </CheckRow>
+                      <CheckRow>
+                        Social content: <strong style={{ color: '#0F172A', fontWeight: 600 }}>10 LinkedIn + 10 X posts</strong>{' '}
+                        <span className="inline-block ml-1 font-bold align-middle" style={{ fontSize: 10, background: '#EEF2FF', border: '1px solid rgba(99,102,241,0.3)', color: '#4F46E5', padding: '2px 7px', borderRadius: 4 }}>New</span>
+                      </CheckRow>
+                    </ul>
+
+                    <a
+                      href="/#contact"
+                      className="block w-full text-center font-bold rounded-xl transition-all duration-300 hover:scale-[1.01] hover:-translate-y-0.5"
+                      style={{
+                        padding: '14px 24px',
+                        fontSize: 15,
+                        background: '#22D3EE',
+                        color: '#020617',
+                        boxShadow: '0 0 24px rgba(34,211,238,0.25), 0 4px 12px rgba(34,211,238,0.15)',
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.background = '#38BDF8'; }}
+                      onMouseLeave={e => { e.currentTarget.style.background = '#22D3EE'; }}
+                    >
+                      Get Started →
+                    </a>
+                  </motion.div>
                 </div>
 
                 {/* Fine print */}
-                <p
+                <motion.p
+                  variants={fadeUp}
                   className="text-center mt-6"
-                  style={{ fontSize: 13, color: '#475569', lineHeight: 1.8 }}
+                  style={{ fontSize: 13, color: '#94A3B8', lineHeight: 1.8 }}
                 >
-                  Pricing customised after audit based on category, competition &amp; scope &middot; All plans include onboarding call
-                  <br />
-                  PR articles billed separately &middot; Enterprise plans available on request
-                </p>
-              </div>
-
+                  Pricing customised after audit based on category, competition &amp; scope · All plans include onboarding call
+                  <br />PR articles billed separately · Enterprise plans available on request
+                </motion.p>
+              </motion.div>
             </div>
           </section>
+
+          {/* ══════════════════════════════════════════════
+              COMPARISON TABLE
+          ══════════════════════════════════════════════ */}
+          <section
+            ref={tableRef}
+            style={{ background: '#FAFBFF', padding: '80px 24px' }}
+          >
+            <div className="max-w-4xl mx-auto">
+              <motion.div
+                variants={stagger}
+                initial="hidden"
+                animate={tableInView ? 'visible' : 'hidden'}
+              >
+                <motion.h2
+                  variants={fadeUp}
+                  className="text-center font-bold mb-10"
+                  style={{ fontSize: 22, color: '#0F172A', letterSpacing: '-0.01em' }}
+                >
+                  Feature-by-feature comparison
+                </motion.h2>
+
+                <motion.div
+                  variants={fadeUp}
+                  className="overflow-x-auto rounded-2xl"
+                  style={{ border: '1px solid #E8EDFB', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(99,102,241,0.05)' }}
+                >
+                  <table className="w-full border-collapse" style={{ background: '#FFFFFF', minWidth: 480 }}>
+                    <thead>
+                      <tr>
+                        <th className="text-left font-bold uppercase tracking-widest" style={{ padding: '18px 24px', fontSize: 12, color: '#94A3B8', borderBottom: '1px solid #F1F5F9', letterSpacing: '0.1em' }}>Feature</th>
+                        <th className="text-center font-bold uppercase tracking-widest" style={{ padding: '18px 24px', fontSize: 12, color: '#94A3B8', borderBottom: '1px solid #F1F5F9', letterSpacing: '0.1em' }}>Starter</th>
+                        <th className="text-center font-bold uppercase tracking-widest" style={{ padding: '18px 24px', fontSize: 12, color: '#0891B2', borderBottom: '1px solid #F1F5F9', letterSpacing: '0.1em', background: 'rgba(34,211,238,0.04)' }}>Growth</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {([
+                        ['AI visibility scan', { type: 'val', v: 'Full' }, { type: 'val', v: 'Full' }],
+                        ['Competitor benchmarking', { type: 'check' }, { type: 'check' }],
+                        ['Gap analysis report', { type: 'check' }, { type: 'check' }],
+                        ['AEO strategy & architecture plan', { type: 'check' }, { type: 'check' }],
+                        ['Website & content structure optimisation', { type: 'check' }, { type: 'check' }],
+                        ['AEO-optimised articles per month', { type: 'val', v: '250' }, { type: 'val', v: '500' }],
+                        ['Performance reporting', { type: 'plain', v: 'Monthly' }, { type: 'val', v: 'Bi-monthly' }],
+                        ['PR articles (written & published)', { type: 'dash' }, { type: 'val', v: '2 / month' }],
+                        ['Quora, Reddit & Wikipedia strategy', { type: 'dash' }, { type: 'check' }],
+                        ['Social media content creation', { type: 'dash' }, { type: 'val', v: '10 LinkedIn + 10 X' }],
+                      ] as [string, { type: string; v?: string }, { type: string; v?: string }][]).map(([feature, starter, growth], i) => {
+                        const cell = (c: { type: string; v?: string }, isGrowth = false) => {
+                          if (c.type === 'check') return <span style={{ color: '#059669', fontSize: 17, fontWeight: 700 }}>✓</span>
+                          if (c.type === 'dash')  return <span style={{ color: '#CBD5E1', fontSize: 18 }}>—</span>
+                          if (c.type === 'val')   return <span style={{ color: isGrowth ? '#0891B2' : '#1E293B', fontWeight: 600, fontSize: 14 }}>{c.v}</span>
+                          return <span style={{ color: '#64748B', fontSize: 14 }}>{c.v}</span>
+                        }
+                        return (
+                          <tr key={i} style={{ borderBottom: i < 9 ? '1px solid #F8FAFF' : 'none' }}>
+                            <td className="font-medium" style={{ padding: '15px 24px', fontSize: 14, color: '#334155' }}>{feature}</td>
+                            <td className="text-center" style={{ padding: '15px 24px' }}>{cell(starter)}</td>
+                            <td className="text-center" style={{ padding: '15px 24px', background: 'rgba(34,211,238,0.03)' }}>{cell(growth, true)}</td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </motion.div>
+              </motion.div>
+            </div>
+          </section>
+
+          {/* ══════════════════════════════════════════════
+              FREE AUDIT STRIP  (below plans, subtle)
+          ══════════════════════════════════════════════ */}
+          <section style={{ background: '#F5F7FF', padding: '0 24px 80px' }}>
+            <div className="max-w-4xl mx-auto">
+              <div
+                ref={auditRef}
+                className="rounded-2xl p-7 md:p-9 relative overflow-hidden"
+                style={{
+                  background: '#FFFFFF',
+                  border: '1px solid #E8EDFB',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                  opacity: auditInView ? 1 : 0,
+                  transform: auditInView ? 'translateY(0)' : 'translateY(24px)',
+                  transition: 'opacity 0.6s ease, transform 0.6s ease',
+                }}
+              >
+                {/* subtle rainbow top border */}
+                <div
+                  className="absolute top-0 left-0 right-0 h-0.5 rounded-t-2xl"
+                  style={{ background: 'linear-gradient(90deg, #22D3EE, #818CF8, #C084FC)' }}
+                />
+
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[11px] font-bold uppercase tracking-widest mb-1.5" style={{ color: '#CBD5E1', letterSpacing: '0.12em' }}>
+                      Not sure where to start?
+                    </p>
+                    <h3 className="font-bold mb-2" style={{ fontSize: 18, color: '#0F172A' }}>
+                      Free AI Visibility Audit
+                    </h3>
+                    <p style={{ fontSize: 14, color: '#64748B', lineHeight: 1.7, maxWidth: 480 }}>
+                      See where you stand across ChatGPT, Claude, Gemini &amp; Perplexity — before committing
+                      to any plan. No credit card, no obligation.
+                    </p>
+                    <div className="flex flex-wrap gap-2 mt-4">
+                      {['Multi-model scan', 'Competitor benchmarking', 'Gap analysis', 'Full report delivered'].map((tag) => (
+                        <span
+                          key={tag}
+                          className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full"
+                          style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', color: '#64748B' }}
+                        >
+                          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex-shrink-0 text-left sm:text-center">
+                    <div className="font-black mb-0.5" style={{ fontSize: 30, color: '#0F172A', letterSpacing: '-0.02em' }}>Free</div>
+                    <div className="mb-4" style={{ fontSize: 12, color: '#94A3B8' }}>zero commitment</div>
+                    <a
+                      href="/#contact"
+                      className="inline-flex items-center font-bold rounded-full transition-all duration-300 hover:scale-[1.02] hover:-translate-y-0.5"
+                      style={{
+                        background: '#22D3EE', color: '#020617',
+                        padding: '11px 22px', fontSize: 14,
+                        boxShadow: '0 0 20px rgba(34,211,238,0.22)',
+                        whiteSpace: 'nowrap',
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.background = '#38BDF8'; }}
+                      onMouseLeave={e => { e.currentTarget.style.background = '#22D3EE'; }}
+                    >
+                      Get Free Audit →
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ══════════════════════════════════════════════
+              BOTTOM CTA BAND
+          ══════════════════════════════════════════════ */}
+          <section style={{ background: '#FAFBFF', padding: '0 24px 80px' }}>
+            <div className="max-w-4xl mx-auto">
+              <div
+                className="rounded-2xl relative overflow-hidden text-center"
+                style={{
+                  padding: 'clamp(40px, 6vw, 60px) clamp(24px, 6vw, 64px)',
+                  background: 'linear-gradient(135deg, rgba(34,211,238,0.06) 0%, rgba(129,140,248,0.06) 50%, rgba(192,132,252,0.06) 100%)',
+                  border: '1px solid #E8EDFB',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 12px 40px rgba(99,102,241,0.07)',
+                }}
+              >
+                <div
+                  className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl"
+                  style={{ background: 'linear-gradient(90deg, #22D3EE, #818CF8, #C084FC)' }}
+                />
+                <h2
+                  className="font-black tracking-tight mb-3"
+                  style={{ fontSize: 'clamp(24px, 3.5vw, 34px)', color: '#0F172A', letterSpacing: '-0.025em' }}
+                >
+                  Ready to see where you stand?
+                </h2>
+                <p className="mb-8 mx-auto" style={{ fontSize: 16, color: '#64748B', maxWidth: 460, lineHeight: 1.8 }}>
+                  Start with a free audit. We&apos;ll show you exactly how AI sees your brand today —
+                  no commitment, just data.
+                </p>
+                <div className="flex flex-wrap justify-center gap-3">
+                  <a
+                    href="/#contact"
+                    className="inline-flex items-center gap-2 font-bold px-8 py-3.5 rounded-full transition-all duration-300 hover:scale-[1.02] hover:-translate-y-0.5"
+                    style={{
+                      background: '#22D3EE', color: '#020617', fontSize: 15,
+                      boxShadow: '0 0 32px rgba(34,211,238,0.28), 0 4px 14px rgba(34,211,238,0.18)',
+                    }}
+                  >
+                    Get a Free AI Visibility Audit →
+                  </a>
+                  <a
+                    href="https://calendly.com/tejas-gai/30min"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 font-medium px-6 py-3.5 rounded-full border border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-700 hover:bg-white transition-all duration-200"
+                    style={{ fontSize: 15 }}
+                  >
+                    Talk to us
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+
         </div>
       </main>
-
       <Footer />
     </>
   )
